@@ -1,16 +1,16 @@
 const {
-    createType,
-    getTypeById,
-    getTypes,
-    updateType,
-    deleteType
-} = require("../models/type.model");
+    createVak,
+    getVakById,
+    getVakken,
+    updateVak,
+    deleteVak
+} = require("../models/vak.model");
 
 module.exports = {
-    createType: (req, res) => {
+    createVak: (req, res) => {
         const body = req.body;
 
-        createType(body, (err, results) => {
+        createVak(body, (err, results) => {
             if (err) {
                 console.log(err);
                 return res.status(500).json({
@@ -24,9 +24,9 @@ module.exports = {
             })
         })
     },
-    getTypeById: (req, res) => {
-        const type_id = req.params.id;
-        getTypeById(type_id, (err, results) => {
+    getVakById: (req, res) => {
+        const vak_id = req.params.id;
+        getVakById(vak_id, (err, results) => {
             if (err) {
                 console.log(err);
                 return;
@@ -34,7 +34,7 @@ module.exports = {
             if (!results) {
                 return res.json({
                     succes: 0,
-                    message: "Type Bestaat niet!"
+                    message: "Vak Bestaat niet!"
                 });
             }
             return res.json({
@@ -43,8 +43,8 @@ module.exports = {
             });
         });
     },
-    getTypes: (req, res) => {
-        getTypes((err, results) => {
+    getVakken: (req, res) => {
+        getVakken((err, results) => {
             if (err) {
                 console.log(err);
                 return;
@@ -52,7 +52,7 @@ module.exports = {
             if (!results) {
                 return res.status(204).json({
                     success: 0,
-                    message: "Er bestaan op dit moment geen types! "
+                    message: "Er bestaan op dit moment geen vakken! "
                 });
             }
             return res.status(200).json({
@@ -61,10 +61,10 @@ module.exports = {
             });
         });
     },
-    updateType: (req, res) => {
+    updateVak: (req, res) => {
         const body = req.body;
-        const type_id = req.params.id;
-        getTypeById(type_id, (err, results) => {
+        const vak_id = req.params.id;
+        getVakById(vak_id, (err, results) => {
             if (err) {
                 console.log(err);
                 return;
@@ -72,10 +72,10 @@ module.exports = {
             if (!results) {
                 return res.json({
                     succes: 0,
-                    message: "type bestaat niet!"
+                    message: "vak bestaat niet!"
                 });
             } else {
-                updateType(body, type_id, (err) => {
+                updateVak(body, vak_id, (err) => {
                     if (err) {
                         console.log(err);
                         return;
@@ -90,9 +90,9 @@ module.exports = {
 
 
     },
-    deleteType: (req, res) => {
-        const type_id = req.params.id;
-        getTypeById(type_id, (err, results) => {
+    deleteVak: (req, res) => {
+        const vak_id = req.params.id;
+        getVakById(vak_id, (err, results) => {
             if (err) {
                 console.log(err);
                 return;
@@ -100,17 +100,17 @@ module.exports = {
             if (!results) {
                 return res.status(404).json({
                     success: 0,
-                    message: "Type bestaat niet!"
+                    message: "Vak bestaat niet!"
                 });
             } else {
-                deleteType(type_id, (err) => {
+                deleteVak(vak_id, (err) => {
                     if (err) {
                         console.log(err);
                         return;
                     }
                     return res.status(200).json({
                         success: 1,
-                        message: "Type succesvol verwijderd"
+                        message: "Vak succesvol verwijderd"
                     });
                 });
             }

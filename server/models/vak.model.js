@@ -1,18 +1,10 @@
 const pool = require("../../config/config");
 
 module.exports = {
-  createAssignment: (data, callBack) => {
+  createVak: (data, callBack) => {
     pool.query(
-      'insert into assignment(naam, start_datum, inlever_datum, vak_id, punten, herkansingspunten, roadmap_id) values(?,?,?,?,?,?,?)',
-      [
-          data.naam,
-          data.start_datum,
-          data.inlever_datum,
-          data.vak_id,
-          data.punten,
-          data.herkansingspunten,
-          data.roadmap_id
-        ],
+      'insert into vak(vak) values(?)',
+      [data.vak],
       (error, results, fields) => {
         if (error) {
           return callBack(error);
@@ -21,9 +13,9 @@ module.exports = {
       }
     );
   },
-  getAssignments: callBack => {
+  getVakken: callBack => {
     pool.query(
-      `select * from assignment`,
+      `select * from vak`,
       [],
       (error, results, fields) => {
         if (error) {
@@ -33,9 +25,9 @@ module.exports = {
       }
     );
   },
-  getAssignmentById: (id, callBack) => {
+  getVakById: (id, callBack) => {
     pool.query(
-      `select * from assignment where id = ?`,
+      `select * from vak where id = ?`,
       [id],
       (error, results, fields) => {
         if (error) {
@@ -45,17 +37,11 @@ module.exports = {
       }
     );
   },
-  updateAssignment: (data, id, callBack) => {
+  updateVak: (data, id, callBack) => {
     pool.query(
-      'update assignment set naam = ?, start_datum = ?, inlever_datum = ?, vak_id = ?, punten = ?, herkansingspunten = ?, roadmap_id = ? where id = ?',
+      'update vak set vak = ? where id = ?',
       [
-        data.naam,
-        data.start_datum,
-        data.inlever_datum,
-        data.vak_id,
-        data.punten,
-        data.herkansingspunten,
-        data.roadmap_id,
+        data.vak,
         id
       ],
       (error, results, fields) => {
@@ -66,9 +52,9 @@ module.exports = {
       }
     );
   },
-  deleteAssignment: (id, callBack) => {
+  deleteVak: (id, callBack) => {
     pool.query(
-      `delete from assignment where id = ?`,
+      `delete from vak where id = ?`,
       [id],
       (error, results, fields) => {
         if (error) {
