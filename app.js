@@ -5,9 +5,8 @@ const morgan = require("morgan");
 var bodyParser = require('body-parser')
 
 const app = express();
-const userRouter = require("./server/routes/user");
+const gebruikerRouter = require("./server/routes/gebruiker.route");
 const typeRouter = require("./server/routes/type");
-const sessionRouter = require("./server/routes/session");
 const klasRouter = require("./server/routes/klas.route");
 const roadmapRouter = require("./server/routes/roadmap.route");
 const assignmentRouter = require("./server/routes/assignment.route");
@@ -23,7 +22,7 @@ app.use(bodyParser.json());
 
 
 
-app.use("/user", userRouter);
+app.use("/gebruiker", gebruikerRouter);
 app.use("/type", typeRouter);
 app.use("/klas", klasRouter);
 app.use("/roadmap", roadmapRouter);

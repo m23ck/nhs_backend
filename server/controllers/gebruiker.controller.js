@@ -1,11 +1,11 @@
 const {
-    create,
-    getUserById,
-    getUsers,
-    updateUser,
-    deleteUser,
-    getUserByUsername
-} = require("../models/user");
+    createGebruiker,
+    getGebruikerById,
+    getGebruikers,
+    updateGebruiker,
+    deleteGebruiker,
+    getGebruikerByEmail
+} = require("../models/gebruiker.model");
 
 const {
     genSaltSync,
@@ -17,16 +17,16 @@ const {
 } = require("jsonwebtoken");
 
 module.exports = {
-    createUser: (req, res) => {
+    createGebruiker: (req, res) => {
         const body = req.body;
         const salt = genSaltSync(10);
-        body.password = hashSync(body.password, salt);
-        create(body, (err, results) => {
+        body.wachtwoord = hashSync(body.wachtwoord, salt);
+        createGebruiker(body, (err, results) => {
             if (err) {
                 console.log(err);
                 return res.status(500).json({
                     success: 0,
-                    message: "Database connection error!"
+                    message: "Er is een probleem met het verbinden met het database!"
                 });
             }
             return res.status(200).json({
@@ -35,9 +35,9 @@ module.exports = {
             });
         });
     },
-    getUserById: (req, res) => {
-        const user_id = req.params.user_id;
-        getUserById(user_id, (err, results) => {
+    getGebruikerById: (req, res) => {
+        const gebruiker_id = req.params.id;
+        getGebruikerById(gebruiker_id, (err, results) => {
             if (err) {
                 console.log(err);
                 return;
@@ -45,7 +45,7 @@ module.exports = {
             if (!results) {
                 return res.status(404).json({
                     succes: 0,
-                    message: "User not found!"
+                    message: "Gebruiker bestaat niet!"
                 });
             }
             return res.status(200).json({
@@ -54,8 +54,27 @@ module.exports = {
             });
         });
     },
-    getUsers: (req, res) => {
-        getUsers((err, results) => {
+    getGebruikerByEmail: (req, res) => {
+        const email = req.params.email;
+        getGebruikerByEmail(email, (err, results) => {
+            if (err) {
+                console.log(err);
+                return;
+            }
+            if (!results) {
+                return res.status(404).json({
+                    succes: 0,
+                    message: "Gebruiker bestaat niet!"
+                });
+            }
+            return res.status(200).json({
+                success: 1,
+                data: results
+            });
+        });
+    },
+    getGebruikers: (req, res) => {
+        getGebruikers((err, results) => {
             if (err) {
                 console.log(err);
                 return;
@@ -63,7 +82,7 @@ module.exports = {
             if (!results) {
                 return res.status(204).json({
                     success: 0,
-                    message: "There is insufficient data to display!"
+                    message: "Er bestaan nog geen gebruikers!"
                 });
             }
             return res.status(200).json({
@@ -72,12 +91,12 @@ module.exports = {
             });
         });
     },
-    updateUser: (req, res) => {
+    updateGebruiker: (req, res) => {
         const body = req.body;
         const salt = genSaltSync(10);
-        body.password = hashSync(body.password, salt);
-        const user_id = req.params.user_id;
-        getUserById(user_id, (err, result) => {
+        body.wachtwoord = hashSync(body.wachtwoord, salt);
+        const gebruiker_id = req.params.id;
+        getGebruikerById(gebruiker_id, (err, result) => {
             if (err) {
                 console.log(err);
                 return;
@@ -85,17 +104,17 @@ module.exports = {
             if (!result) {
                 return res.status(404).json({
                     success: 0,
-                    message: "User does not exist!"
+                    message: "Gebruiker bestaat niet!"
                 });
             } else {
-                updateUser(body, user_id, (err, results) => {
+                updateGebruiker(body, gebruiker_id, (err, results) => {
                     if (err) {
                         console.log(err);
                         return;
                     }
                     return res.status(200).json({
                         success: 1,
-                        message: "Succesfully updated!"
+                        message: "Succesvol geupdate!"
                     });
                 });
             }
@@ -103,9 +122,9 @@ module.exports = {
 
 
     },
-    deleteUser: (req, res) => {
-        const data = req.params.user_id;
-        getUserById(data, (err, result) => {
+    deleteGebruiker: (req, res) => {
+        const data = req.params.id;
+        getGebruikerById(data, (err, result) => {
             if (err) {
                 console.log(err);
                 return;
@@ -113,17 +132,17 @@ module.exports = {
             if (!result) {
                 return res.status(404).json({
                     success: 0,
-                    message: "User not found!"
+                    message: "Gebruiker bestaat niet!"
                 });
             } else {
-                deleteUser(data, (err) => {
+                deleteGebruiker(data, (err) => {
                     if (err) {
                         console.log(err);
                         return;
                     }
                     return res.status(200).json({
                         success: 1,
-                        message: "User succesfully deleted"
+                        message: "Gebruiker succesvol verwijderd"
                     });
                 });
             }
@@ -132,20 +151,20 @@ module.exports = {
     },
     login: (req, res) => {
         const body = req.body;
-        getUserByUsername(body.username, (err, results) => {
+        getGebruikerByEmail(body.email, (err, results) => {
             if (err) {
                 console.log(err);
             }
             if (!results) {
                 return res.status(401).json({
                     success: 0,
-                    data: "Username or psassword incorrect!1"
+                    data: "Email of wachtwoord incorrect!"
                 });
             }
-            const result = compareSync(body.password, results.password);
-            // incase theres an error when testing this moet je ipv results.password: results[0].password schrijven
+            const result = compareSync(body.wachtwoord, results.wachtwoord);
+            // incase theres an error when testing this moet je ipv results.wachtwoord: results[0].wachtwoord schrijven
             if (result) {
-                results.password = undefined;
+                results.wachtwoord = undefined;
                 const jsonToken = sign({
                     result: results
                 }, process.env.KEY, {
@@ -153,14 +172,14 @@ module.exports = {
                 });
                 return res.status(200).json({
                     success: 1,
-                    message: "Login Succesful",
+                    message: "Login Succesvol",
                     token: jsonToken,
-                    user_id: results.user_id
+                    gebruiker_id: results.id
                 });
             } else {
                 return res.status(401).json({
                     success: 0,
-                    data: "Username or password incorrect!"
+                    data: "Email of wachtwoord incorrect!"
                 });
             }
         });

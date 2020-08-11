@@ -2,14 +2,18 @@ const pool = require("../../config/config");
 
 
 module.exports = {
-    create: (data, callBack) => {
+    createGebruiker: (data, callBack) => {
         pool.query(
-            'insert into users(username, type_id, email, password) values(?,?,?,?)',
+            'insert into gebruiker(gebruiker_type_id, naam, achternaam, email, jaar_inschrijving, telefoon, adres, wachtwoord) values(?,?,?,?,?,?,?,?)',
             [
-                data.usernname,
-                data.type_id,
+                data.gebruiker_type_id,
+                data.naam,
+                data.achternaam,
                 data.email,
-                data.password
+                data.jaar_inschrijving,
+                data.telefoon,
+                data.adres,
+                data.wachtwoord
             ],
             (error, results, fields) => {
                 if (error) {
@@ -19,9 +23,9 @@ module.exports = {
             }
         );
     },
-    getUsers: callBack => {
+    getGebruikers: callBack => {
         pool.query(
-            `select * from users inner join type on users.type_id=type.type_id`,
+            `select * from gebruikers inner join type on gebruikers.type_id=type.type_id`,
             [],
             (error, results, fields) => {
                 if (error) {
@@ -31,8 +35,8 @@ module.exports = {
             }
         );
     },
-    getUserById: (id, callBack) => {
-        pool.query(`select * from users inner join type on users.type_id=type.id where id = ?`,
+    getGebruikerById: (id, callBack) => {
+        pool.query(`select * from gebruiker inner join type on gebruikers.type_id=type.id where id = ?`,
             [id],
             (error, results, fields) => {
                 if (error) {
@@ -42,13 +46,17 @@ module.exports = {
             }
         );
     },
-    updateUser: (data, id, callBack) => {
-        pool.query('update user set username = ?, type_id = ?, email = ?, password = ? where id = ?',
+    updateGebruiker: (data, id, callBack) => {
+        pool.query('update gebruiker set gebruiker_type_id = ?, naam = ?, achternaam = ?, email = ?, jaar_inschrijving = ?, telefoon = ?, adres = ?, wachtwoord = ? where id = ?',
             [
-                data.usernname,
-                data.type_id,
+                data.gebruiker_type_id,
+                data.naam,
+                data.achternaam,
                 data.email,
-                data.password,
+                data.jaar_inschrijving,
+                data.telefoon,
+                data.adres,
+                data.wachtwoord,
                 id
             ],
             (error, results, fields) => {
@@ -59,9 +67,9 @@ module.exports = {
             }
         );
     },
-    deleteUser: (id, callBack) => {
+    deleteGebruiker: (id, callBack) => {
         pool.query(
-            `delete from users where id = ?`,
+            `delete from gebruikers where id = ?`,
             [id],
             (error, results, fields) => {
                 if (error) {
@@ -71,10 +79,10 @@ module.exports = {
             }
         );
     },
-    getUserByUsername: (usernname, callBack) => {
+    getGebruikerByEmail: (email, callBack) => {
         pool.query(
-            'select * from users where username = ?',
-            [usernname],
+            'select * from gebruikers where email = ?',
+            [email],
             (error, results, fields) => {
                 if (error) {
                     return callBack(error);
