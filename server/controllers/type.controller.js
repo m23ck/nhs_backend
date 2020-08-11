@@ -1,21 +1,21 @@
 const {
-    create,
+    createType,
     getTypeById,
     getTypes,
     updateType,
     deleteType
-} = require("../models/type");
+} = require("../models/type.model");
 
 module.exports = {
     createType: (req, res) => {
         const body = req.body;
 
-        create(body, (err, results) => {
+        createType(body, (err, results) => {
             if (err) {
                 console.log(err);
                 return res.status(500).json({
                     success: 0,
-                    message: "Database connection error!"
+                    message: "Kan geen verbinding maken met het database!"
                 })
             }
             return res.status(200).json({
@@ -34,7 +34,7 @@ module.exports = {
             if (!results) {
                 return res.json({
                     succes: 0,
-                    message: "Type not found!"
+                    message: "Type Bestaat niet!"
                 });
             }
             return res.json({
@@ -52,7 +52,7 @@ module.exports = {
             if (!results) {
                 return res.status(204).json({
                     success: 0,
-                    message: " There is insufficient data to display! "
+                    message: "Er bestaan op dit moment geen types! "
                 });
             }
             return res.status(200).json({
@@ -72,7 +72,7 @@ module.exports = {
             if (!results) {
                 return res.json({
                     succes: 0,
-                    message: "type does not exist!"
+                    message: "type bestaat niet!"
                 });
             } else {
                 updateType(body, type_id, (err) => {
@@ -82,7 +82,7 @@ module.exports = {
                     }
                     return res.status(200).json({
                         success: 1,
-                        message: "update Succesful!"
+                        message: "update Succesvol!"
                     });
                 });
             }
@@ -100,7 +100,7 @@ module.exports = {
             if (!results) {
                 return res.status(404).json({
                     success: 0,
-                    message: "Type not found!"
+                    message: "Type bestaat niet!"
                 });
             } else {
                 deleteType(type_id, (err) => {
@@ -110,7 +110,7 @@ module.exports = {
                     }
                     return res.status(200).json({
                         success: 1,
-                        message: "Type succesfully deleted"
+                        message: "Type succesvol verwijderd"
                     });
                 });
             }

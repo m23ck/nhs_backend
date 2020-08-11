@@ -4,7 +4,7 @@ const {
     getTypes,
     updateType,
     deleteType
-} = require("../controllers/type");
+} = require("../controllers/type.controller");
 const router = require("express").Router();
 const { checkToken } = require("../../auth/token_validation");
 

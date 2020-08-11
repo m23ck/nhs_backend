@@ -6,10 +6,11 @@ var bodyParser = require('body-parser')
 
 const app = express();
 const gebruikerRouter = require("./server/routes/gebruiker.route");
-const typeRouter = require("./server/routes/type");
+const typeRouter = require("./server/routes/type.model");
 const klasRouter = require("./server/routes/klas.route");
 const roadmapRouter = require("./server/routes/roadmap.route");
 const assignmentRouter = require("./server/routes/assignment.route");
+const resultaatRouter = require("./server/routes/resultaat.route");
 
 //Remove when in production
 app.use(cors({
@@ -27,6 +28,7 @@ app.use("/type", typeRouter);
 app.use("/klas", klasRouter);
 app.use("/roadmap", roadmapRouter);
 app.use("/assignment", assignmentRouter);
+app.use("/resultaat", resultaatRouter);
 
 
 

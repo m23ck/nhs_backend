@@ -1,7 +1,7 @@
 const pool = require("../../config/config");
 
 module.exports = {
-  create: (data, callBack) => {
+  createType: (data, callBack) => {
     pool.query(
       'insert into type(type) values(?)',
       [data.type],
